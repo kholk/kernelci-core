@@ -57,6 +57,7 @@ file_systems:
     type: debian
     ramdisk: 'buster/20210913.0/{arch}/initrd.cpio.gz'
     nfs: 'buster/20210913.0/{arch}/full.rootfs.tar.xz'
+    compression: gz
     root_type: nfs
 
   debian_buster-cros-ec_ramdisk:
