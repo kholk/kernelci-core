@@ -231,6 +231,14 @@ test_plans:
     params:
       job_timeout: '45'
 
+  lc-compliance-rockpi4:
+    rootfs: debian_buster-libcamera_nfs
+    pattern: 'lc-compliance/{category}-{method}-{protocol}-{rootfs}-lc-compliance-template.jinja2'
+    params:
+      job_timeout: '45'
+    filters:
+      - passlist: {defconfig: ['rockpi4_nfs']}
+
   ltp: &ltp
     rootfs: debian_buster-ltp_nfs
     pattern: 'ltp/{category}-{method}-{protocol}-{rootfs}-ltp-template.jinja2'
@@ -1134,6 +1142,13 @@ device_types:
     filters:
       - blocklist: *allmodconfig_filter
       - blocklist: {kernel: ['v3.']}
+
+  rockpi4:
+    mach: mediatek
+    class: arm64-dtb
+    boot_method: depthcharge
+    filters:
+      - passlist: {defconfig: ['rockpi4_nfs']}
 
   qcom-qdf2400:
     mach: qcom
@@ -2249,6 +2264,10 @@ test_configs:
       - cros-ec
       - sleep
       - usb
+
+  - device_type: rockpi4
+    test_plans:
+      - lc-compliance-rockpi4
 
   - device_type: qcom-qdf2400
     test_plans:
