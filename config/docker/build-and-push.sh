@@ -91,7 +91,7 @@ then
   docker_build_and_tag build-base build-base
   for c in {gcc,clang}-*
   do
-      docker_build_and_tag $c build-$c
+      docker_build_and_tag $c $c
   done
 fi
 
@@ -122,7 +122,7 @@ fi
 
 if [ "x${k8s}" == "xtrue" ]
 then
-  docker_build_and_tag build-k8s build-k8s
+  docker_build_and_tag k8s k8s
 fi
 
 if [ "x${qemu}" == "xtrue" ]
