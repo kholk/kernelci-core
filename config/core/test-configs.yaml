@@ -51,44 +51,44 @@ file_systems:
 
   debian_buster_ramdisk:
     type: debian
-    ramdisk: 'buster/20210827.0/{arch}/rootfs.cpio.gz'
+    ramdisk: 'buster/20211008.0/{arch}/rootfs.cpio.gz'
 
   debian_buster_nfs:
     type: debian
-    ramdisk: 'buster/20210827.0/{arch}/initrd.cpio.gz'
-    nfs: 'buster/20210827.0/{arch}/full.rootfs.tar.xz'
+    ramdisk: 'buster/20211008.0/{arch}/initrd.cpio.gz'
+    nfs: 'buster/20211008.0/{arch}/full.rootfs.tar.xz'
     root_type: nfs
 
   debian_buster-cros-ec_ramdisk:
     type: debian
-    ramdisk: 'buster-cros-ec/20210827.0/{arch}/rootfs.cpio.gz'
+    ramdisk: 'buster-cros-ec/20211008.0/{arch}/rootfs.cpio.gz'
 
   debian_buster-igt_ramdisk:
     type: debian
-    ramdisk: 'buster-igt/20210827.0/{arch}/rootfs.cpio.gz'
+    ramdisk: 'buster-igt/20211008.0/{arch}/rootfs.cpio.gz'
 
   debian_buster_kselftest:
     type: debian
-    ramdisk: 'buster-kselftest/20210827.0/{arch}/initrd.cpio.gz'
-    nfs: 'buster-kselftest/20210827.0/{arch}/full.rootfs.tar.xz'
+    ramdisk: 'buster-kselftest/20211008.0/{arch}/initrd.cpio.gz'
+    nfs: 'buster-kselftest/20211008.0/{arch}/full.rootfs.tar.xz'
     root_type: nfs
     params:
       os_config: 'debian'
 
   debian_buster-v4l2_ramdisk:
     type: debian
-    ramdisk: 'buster-v4l2/20210827.0/{arch}/rootfs.cpio.gz'
+    ramdisk: 'buster-v4l2/20211008.0/{arch}/rootfs.cpio.gz'
 
   debian_buster-libcamera_nfs:
     type: debian
-    ramdisk: 'buster-libcamera/20210827.0/{arch}/initrd.cpio.gz'
-    nfs: 'buster-libcamera/20210827.0/{arch}/full.rootfs.tar.xz'
+    ramdisk: 'buster-libcamera/20211008.0/{arch}/initrd.cpio.gz'
+    nfs: 'buster-libcamera/20211008.0/{arch}/full.rootfs.tar.xz'
     root_type: nfs
 
   debian_buster-ltp_nfs:
     type: debian
-    ramdisk: 'buster-ltp/20210827.0/{arch}/initrd.cpio.gz'
-    nfs: 'buster-ltp/20210827.0/{arch}/full.rootfs.tar.xz'
+    ramdisk: 'buster-ltp/20211008.0/{arch}/initrd.cpio.gz'
+    nfs: 'buster-ltp/20211008.0/{arch}/full.rootfs.tar.xz'
     root_type: nfs
 
 
@@ -1693,6 +1693,16 @@ device_types:
       - blocklist: *allmodconfig_filter
       - blocklist: {defconfig: ['multi_v7_defconfig+linaro-base+distribution']}
 
+  zynqmp-zcu102:
+    name: 'zynqmp-zcu102'
+    mach: zynqmp
+    arch: arm64
+    class: arm64-dtb
+    boot_method: uboot
+    dtb: 'xilinx/zynqmp-zcu102-rev1.0.dtb'
+    filters:
+      - passlist: {defconfig: ['defconfig']}
+
 
 test_configs:
 
@@ -2221,11 +2231,6 @@ test_configs:
     test_plans:
       - baseline
       - baseline-nfs
-      - kselftest-filesystems
-      - kselftest-futex
-      - kselftest-lib
-      - kselftest-lkdtm
-      - kselftest-seccomp
 
   - device_type: mustang
     test_plans:
@@ -2604,3 +2609,8 @@ test_configs:
   - device_type: zynq-zc702
     test_plans:
       - baseline
+
+  - device_type: zynqmp-zcu102
+    test_plans:
+      - baseline
+      - smc
