@@ -19,10 +19,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 from jinja2 import Environment, FileSystemLoader
+import urllib.parse
+import requests
 import os
 from kernelci.lab import LabAPI
-
-DEVICE_ONLINE_STATUS = ['idle', 'running', 'reserved']
 
 
 class LAVA(LabAPI):
@@ -35,23 +35,53 @@ class LAVA(LabAPI):
     available in kernelci.config.lab.lab_LAVA objects.
     """
 
-    def _get_devices(self):
-        all_devices = self._server.scheduler.all_devices()
+    def connect(self, user=None, token=None):
+        super().connect(user, token)
+        self._lava_token = token
 
-        all_aliases = dict()
-        for device_type_data in self._server.scheduler.device_types.list():
-            name = device_type_data['name']
-            aliases = self._server.scheduler.device_types.aliases.list(name)
-            for alias in aliases:
-                all_aliases[alias] = name
+    def _rest_query(self, endpoint, ordering, limit=50):
+        base_url = urllib.parse.urljoin(
+            self.config.url, f'api/v0.2/{endpoint}/'
+        )
+        headers = {'Authorization': f"Token {self._lava_token}"}
+        offset = 0
+        results = []
+        while True:
+            query = urllib.parse.urlencode(
+                {'offset': offset, 'limit': limit, 'ordering': ordering}
+            )
+            url = '?'.join([base_url, query])
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+            results.extend(data['results'])
+            total = int(data['count'])
+            if len(results) < total:
+                offset += limit
+            else:
+                break
+        return results
+
+    def _get_devices(self):
+        devices = self._rest_query('devices', 'hostname')
+        all_devices = [
+            tuple(dev[key] for key in ['hostname', 'device_type', 'health'])
+            for dev in devices
+        ]
+
+        aliases = self._rest_query('aliases', 'name')
+        all_aliases = {
+            alias['name']: alias['device_type']
+            for alias in aliases
+        }
 
         device_types = {}
         for device in all_devices:
-            name, device_type, status, _, _ = device
+            name, device_type, health = device
             device_list = device_types.setdefault(device_type, list())
             device_list.append({
                 'name': name,
-                'online': status in DEVICE_ONLINE_STATUS,
+                'online': health == "Good",
             })
         online_status = {
             device_type: any(device['online'] for device in devices)
