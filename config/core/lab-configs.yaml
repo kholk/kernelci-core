@@ -16,6 +16,12 @@ labs:
     lab_type: lava_rest
     url: 'https://lava.sirena.org.uk/'
     priority: low
+    filters:
+      - passlist:
+          plan:
+            - baseline
+            - kselftest
+            - ltp
 
   lab-cip:
     lab_type: lava_rest
