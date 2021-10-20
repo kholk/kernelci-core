@@ -330,6 +330,12 @@ test_plans:
   usb:
     rootfs: debian_buster_ramdisk
 
+  v4l2-compliance-qcom-venus:
+    rootfs: debian_buster-v4l2_ramdisk
+    # FIXME - this is not very sustainable, improve template naming scheme
+    pattern: 'v4l2-compliance/{category}-{method}-{protocol}-{rootfs}-v4l2-compliance-template.jinja2'
+    params: {v4l2_driver: "qcom-venus"}
+
   v4l2-compliance-uvc:
     rootfs: debian_buster-v4l2_ramdisk
     # FIXME - this is not very sustainable, improve template naming scheme
