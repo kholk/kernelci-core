@@ -2441,6 +2441,7 @@ test_configs:
       - igt-kms-msm
       - igt-gpu-msm
       - v4l2-compliance-qcom-venus
+      - v4l2-compliance-uvc
 
   - device_type: snow
     test_plans:
