@@ -65,7 +65,9 @@ labs:
     lab_type: lava_rest
     url: 'https://staging.lava.collabora.dev/'
     priority: '45'
-    filters: *collabora-filters
+    filters:
+      - blocklist:
+          tree: [android]
 
   lab-kontron:
     lab_type: lava_rest
