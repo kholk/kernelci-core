@@ -2432,6 +2432,8 @@ test_configs:
     test_plans:
       - baseline
       - cros-ec
+      - igt-kms-msm
+      - igt-gpu-msm
 
   - device_type: snow
     test_plans:
